@@ -1,15 +1,15 @@
 {
   "processType" : "S",
-  "testType" : "M",
-  "fileType" : "N",
-  "createBlank" : false,
+  "testType" : "E",
+  "fileType" : "E",
+  "createBlank" : true,
   "pageDivision" : false,
   "pageDivision_FirstDifferent" : false,
   "numberOfWord" : 10,
-  "blankRow" : 0,
-  "blankColumn" : 0,
+  "blankRow" : 1,
+  "blankColumn" : 1,
   "pageDivisionSize" : 0,
   "pageDivisionFirstSize" : 0,
   "pageBlankSize" : 0,
-  "numberOfColumn" : 1
+  "numberOfColumn" : 2
 }

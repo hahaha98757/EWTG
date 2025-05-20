@@ -295,9 +295,12 @@ public class CreateExcel  {
 		try(FileInputStream fis = new FileInputStream(Main.fileManagement.existExcelFile);
 			Workbook workbook = new XSSFWorkbook(fis)) {
 			
-			Sheet sheet = workbook.getSheetAt(0);
-			Sheet sheet2 = workbook.getSheetAt(1);
-			
+			Sheet sheet = null, sheet2 = null;
+			try {
+				sheet = workbook.getSheetAt(0);
+				sheet2 = workbook.getSheetAt(1);
+			} catch(Exception e) {
+			}
 			int blankColumn = (int) Main.blankSizeColumnSpinner.getValue();
 			int blankRow = (int) Main.blankSizeRowSpinner.getValue();
 			int division = (int) Main.pageBlankSizeSpinner.getValue();
@@ -315,21 +318,211 @@ public class CreateExcel  {
 			
 			if(sheet == null) {
 				createNewExcel();
+			} else if (sheet != null && sheet2 == null){
+				
+				sheet2 = workbook.createSheet("답지");
+				
+				if(testType == -1) {
+					System.exit(0);
+				} else if(testType == 0) {
+					
+					for(int i = 0; i < lastList.length; i++) {
+						
+						Row row = sheet.getRow(i + blankRow + division * page);
+						if(row == null) {
+							row = sheet.createRow(i + blankRow + division * page);
+						}
+						Row row2 = sheet.createRow(i + blankRow + division * page);
+						
+						for(int j = 0; j < lastList[i].length; j += 2) {
+							if(row.getCell(j + blankColumn) == null) {
+								row.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+								row2.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+								row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+							} else {
+								row.getCell(j + blankColumn).setCellValue(lastList[i][j]);
+								row2.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+								row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+							}
+						}
+						
+						if(Main.pageDivision.isSelected()) {
+							
+							if(page == 0 && Main.pageDivisionFirstDifferent.isSelected()) {
+								line++;
+								if(line == (int) Main.pageDivisionFirstSizeSpinner.getValue()) {
+									line = 0;
+									page = 1;
+								}
+							} else {
+								line++;
+								if(line == (int) Main.pageDivisionSizeSpinner.getValue()) {
+									line = 0;
+									page++;
+								}
+							}
+							
+						}
+					}
+					
+				} else if(testType == 1) {
+					for(int i = 0; i < lastList.length; i++) {
+						
+						Row row = sheet.getRow(i + blankRow + division * page);
+						if(row == null) {
+							row = sheet.createRow(i + blankRow + division * page);
+						}
+						Row row2 = sheet2.createRow(i + blankRow + division * page);
+						
+						for(int j = 0; j < lastList[i].length; j += 2) {
+							
+							if(row.getCell(j + blankColumn) == null) {
+								row.createCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
+								row2.createCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
+								row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j]);
+							} else {
+								row.getCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
+								row2.createCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
+								row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j]);
+							}
+							
+						}
+						
+						if(Main.pageDivision.isSelected()) {
+							
+							if(page == 0 && Main.pageDivisionFirstDifferent.isSelected()) {
+								line++;
+								if(line == (int) Main.pageDivisionFirstSizeSpinner.getValue()) {
+									line = 0;
+									page = 1;
+								}
+							} else {
+								line++;
+								if(line == (int) Main.pageDivisionSizeSpinner.getValue()) {
+									line = 0;
+									page++;
+								}
+							}
+							
+						}
+						
+					} 
+				} else {
+					for(int i = 0; i < lastList.length; i++) {
+						
+						Random ran = new Random();
+						int ranInt = ran.nextInt(2);
+						
+						Row row = sheet.getRow(i + blankRow + division * page);
+						if(row == null) {
+							row = sheet.createRow(i + blankRow + division * page);
+						}
+						Row row2 = sheet2.createRow(i + blankRow + division * page);
+						
+						for(int j = 0; j < lastList[i].length; j += 2) {
+							
+							if(row.getCell(j + blankColumn + ranInt) == null) {
+								if(ranInt == 0) {
+									row.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+								} else {
+									row.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+								}
+								row2.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+								row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+							} else {
+								if(ranInt == 0) {
+									row.getCell(j + blankColumn).setCellValue(lastList[i][j]);
+								} else {
+									row.getCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+								}
+								row2.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+								row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+							}
+							
+						}
+						
+						if(Main.pageDivision.isSelected()) {
+							
+							if(page == 0 && Main.pageDivisionFirstDifferent.isSelected()) {
+								line++;
+								if(line == (int) Main.pageDivisionFirstSizeSpinner.getValue()) {
+									line = 0;
+									page = 1;
+								}
+							} else {
+								line++;
+								if(line == (int) Main.pageDivisionSizeSpinner.getValue()) {
+									line = 0;
+									page++;
+								}
+							}
+							
+						}
+						
+					}
+					
+					
+				
+				}
+			
 			} else {
 				if(testType == -1) {
 					System.exit(0);
 				} else if(testType == 0) {
 					for(int i = 0; i < lastList.length; i++) {
-						Row row = sheet2.getRow(i + blankRow + division * page);
+						
+						Row row = sheet.getRow(i + blankRow + division * page);
+						if(row == null) {
+							row = sheet.createRow(i + blankRow + division * page);
+						}
+						Row row2 = sheet2.getRow(i + blankRow + division * page);
+						if(row2 == null) {
+							row2 = sheet2.createRow(i + blankRow + division * page);
+						}
 						for(int j = 0; j < lastList[i].length; j += 2) {
 							if(row.getCell(j + blankColumn) == null) {
 								row.createCell(j + blankColumn).setCellValue(lastList[i][j]);
-								row.createCell(j + 1 + blankColumn).setCellValue(lastList[i][j + 1]);
+								if(row2.getCell(j + blankColumn) == null) {
+									if(row2.getCell(j + blankColumn + 1) == null) {
+										row2.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									} else {
+										row2.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.getCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									}
+								} else {
+									if(row2.getCell(j + blankColumn + 1) == null) {
+										row2.getCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									} else {
+										row2.getCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.getCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									}
+								}
 							} else {
 								row.getCell(j + blankColumn).setCellValue(lastList[i][j]);
-								row.getCell(j + 1 + blankColumn).setCellValue(lastList[i][j + 1]);
+								if(row2.getCell(j + blankColumn) == null) {
+									if(row2.getCell(j + blankColumn + 1) == null) {
+										row2.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									} else {
+										row2.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.getCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									}
+								} else {
+									if(row2.getCell(j + blankColumn + 1) == null) {
+										row2.getCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									} else {
+										row2.getCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.getCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									}
+								}
 							}
+							
+							
 						}
+						
 						if(Main.pageDivision.isSelected()) {
 							
 							if(page == 0 && Main.pageDivisionFirstDifferent.isSelected()) {
@@ -347,19 +540,64 @@ public class CreateExcel  {
 							}
 							
 						}
+						
+						
 					}
 				} else if(testType == 1) {
 					for(int i = 0; i < lastList.length; i++) {
-						Row row = sheet2.getRow(i + blankRow + division * page);
+						
+						Row row = sheet.getRow(i + blankRow + division * page);
+						if(row == null) {
+							row = sheet.createRow(i + blankRow + division * page);
+						}
+						Row row2 = sheet2.getRow(i + blankRow + division * page);
+						if(row2 == null) {
+							row2 = sheet2.createRow(i + blankRow + division * page);
+						}
 						for(int j = 0; j < lastList[i].length; j += 2) {
 							if(row.getCell(j + blankColumn) == null) {
 								row.createCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
-								row.createCell(j + 1 + blankColumn).setCellValue(lastList[i][j]);
+								if(row2.getCell(j + blankColumn) == null) {
+									if(row2.getCell(j + blankColumn + 1) == null) {
+										row2.createCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
+										row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j]);
+									} else {
+										row2.createCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
+										row2.getCell(j + blankColumn + 1).setCellValue(lastList[i][j]);
+									}
+								} else {
+									if(row2.getCell(j + blankColumn + 1) == null) {
+										row2.getCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
+										row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j]);
+									} else {
+										row2.getCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
+										row2.getCell(j + blankColumn + 1).setCellValue(lastList[i][j]);
+									}
+								}
 							} else {
 								row.getCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
-								row.getCell(j + 1 + blankColumn).setCellValue(lastList[i][j]);
+								if(row2.getCell(j + blankColumn) == null) {
+									if(row2.getCell(j + blankColumn + 1) == null) {
+										row2.createCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
+										row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j]);
+									} else {
+										row2.createCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
+										row2.getCell(j + blankColumn + 1).setCellValue(lastList[i][j]);
+									}
+								} else {
+									if(row2.getCell(j + blankColumn + 1) == null) {
+										row2.getCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
+										row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j]);
+									} else {
+										row2.getCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
+										row2.getCell(j + blankColumn + 1).setCellValue(lastList[i][j]);
+									}
+								}
 							}
+							
+							
 						}
+						
 						if(Main.pageDivision.isSelected()) {
 							
 							if(page == 0 && Main.pageDivisionFirstDifferent.isSelected()) {
@@ -377,136 +615,106 @@ public class CreateExcel  {
 							}
 							
 						}
+						
 					}
-				} else if(testType == 2) {
-					Random ran = new Random();
+				} else {
 					for(int i = 0; i < lastList.length; i++) {
-						Row row = sheet2.getRow(i + blankRow + division * page);
+						
+						Random ran = new Random();
+						int ranInt = ran.nextInt(2);
+						
+						Row row = sheet.getRow(i + blankRow + division * page);
+						if(row == null) {
+							row = sheet.createRow(i + blankRow + division * page);
+						}
+						Row row2 = sheet2.getRow(i + blankRow + division * page);
+						if(row2 == null) {
+							row2 = sheet2.createRow(i + blankRow + division * page);
+						}
 						for(int j = 0; j < lastList[i].length; j += 2) {
-							int random = ran.nextInt(2);
-							if(row.getCell(j + blankColumn) == null) {
-								row.createCell(j + blankColumn).setCellValue(lastList[i][j]);
-								row.createCell(j + 1 + blankColumn).setCellValue(lastList[i][j + 1]);
+							if(row.getCell(j + blankColumn + ranInt) == null) {
+								if(ranInt == 0) {
+									row.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+								} else {
+									row.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+								}
+								if(row2.getCell(j + blankColumn) == null) {
+									if(row2.getCell(j + blankColumn + 1) == null) {
+										row2.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									} else {
+										row2.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.getCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									}
+								} else {
+									if(row2.getCell(j + blankColumn + 1) == null) {
+										row2.getCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									} else {
+										row2.getCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.getCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									}
+								}
 							} else {
-								row.getCell(j + blankColumn).setCellValue(lastList[i][j]);
-								row.getCell(j + 1 + blankColumn).setCellValue(lastList[i][j + 1]);
+								if(ranInt == 0) {
+									row.getCell(j + blankColumn).setCellValue(lastList[i][j]);
+								} else {
+									row.getCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+								}
+								if(row2.getCell(j + blankColumn) == null) {
+									if(row2.getCell(j + blankColumn + 1) == null) {
+										row2.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									} else {
+										row2.createCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.getCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									}
+								} else {
+									if(row2.getCell(j + blankColumn + 1) == null) {
+										row2.getCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.createCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									} else {
+										row2.getCell(j + blankColumn).setCellValue(lastList[i][j]);
+										row2.getCell(j + blankColumn + 1).setCellValue(lastList[i][j + 1]);
+									}
+								}
 							}
 						}
-					}
-					if(Main.pageDivision.isSelected()) {
 						
-						if(page == 0 && Main.pageDivisionFirstDifferent.isSelected()) {
-							line++;
-							if(line == (int) Main.pageDivisionFirstSizeSpinner.getValue()) {
-								line = 0;
-								page = 1;
+						if(Main.pageDivision.isSelected()) {
+							
+							if(page == 0 && Main.pageDivisionFirstDifferent.isSelected()) {
+								line++;
+								if(line == (int) Main.pageDivisionFirstSizeSpinner.getValue()) {
+									line = 0;
+									page = 1;
+								}
+							} else {
+								line++;
+								if(line == (int) Main.pageDivisionSizeSpinner.getValue()) {
+									line = 0;
+									page++;
+								}
 							}
-						} else {
-							line++;
-							if(line == (int) Main.pageDivisionSizeSpinner.getValue()) {
-								line = 0;
-								page++;
-							}
+							
 						}
-						
 					}
 				}
 			}
 			
-			if(testType == 0) {
-				for(int i = 0; i < lastList.length; i++) {
-					Row row = sheet.getRow(i + blankRow + division * page);
-					for(int j = 0; j < lastList[i].length; j += 2) {
-						if(row.getCell(j + blankColumn) == null) {
-							row.createCell(j + blankColumn).setCellValue(lastList[i][j]);
-						} else {
-							row.getCell(j + blankColumn).setCellValue(lastList[i][j]);
-						}
-					}
-					if(Main.pageDivision.isSelected()) {
-						
-						if(page == 0 && Main.pageDivisionFirstDifferent.isSelected()) {
-							line++;
-							if(line == (int) Main.pageDivisionFirstSizeSpinner.getValue()) {
-								line = 0;
-								page = 1;
-							}
-						} else {
-							line++;
-							if(line == (int) Main.pageDivisionSizeSpinner.getValue()) {
-								line = 0;
-								page++;
-							}
-						}
-						
-					}
-				}
-			} else if(testType == 1) {
-				for(int i = 0; i < lastList.length; i++) {
-					Row row = sheet.getRow(i + blankRow + division * page);
-					for(int j = 0; j < lastList[i].length; j += 2) {
-						if(row.getCell(j + blankColumn) == null) {
-							row.createCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
-						} else {
-							row.getCell(j + blankColumn).setCellValue(lastList[i][j + 1]);
-						}
-					}
-					if(Main.pageDivision.isSelected()) {
-						
-						if(page == 0 && Main.pageDivisionFirstDifferent.isSelected()) {
-							line++;
-							if(line == (int) Main.pageDivisionFirstSizeSpinner.getValue()) {
-								line = 0;
-								page = 1;
-							}
-						} else {
-							line++;
-							if(line == (int) Main.pageDivisionSizeSpinner.getValue()) {
-								line = 0;
-								page++;
-							}
-						}
-						
-					}
-				}
-			} else if(testType == 2) {
-				Random ran = new Random();
-				for(int i = 0; i < lastList.length; i++) {
-					Row row = sheet.getRow(i + blankRow + division * page);
-					for(int j = 0; j < lastList[i].length; j += 2) {
-						
-						if(row.getCell(j + blankColumn) == null) {
-							
-						} else {
-							
-							
-						}
-					}
-					if(Main.pageDivision.isSelected()) {
-						
-						if(page == 0 && Main.pageDivisionFirstDifferent.isSelected()) {
-							line++;
-							if(line == (int) Main.pageDivisionFirstSizeSpinner.getValue()) {
-								line = 0;
-								page = 1;
-							}
-						} else {
-							line++;
-							if(line == (int) Main.pageDivisionSizeSpinner.getValue()) {
-								line = 0;
-								page++;
-							}
-						}
-						
-					}
-				}
+			try(FileOutputStream fos = new FileOutputStream(Main.fileManagement.exportFile.getAbsolutePath())) {			
+				workbook.write(fos);
+				workbook.close();
+			} catch(Exception e) {
+				System.out.println("fos에서 오류 발생 / 상세 내용 : " + e.getMessage());
 			}
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
 	}
-	
+
 	public static void singleProcess() throws Exception {
 		lineCount();
 		if(!numberOfWordTest()) {System.exit(0);}
