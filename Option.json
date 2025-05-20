@@ -1,0 +1,15 @@
+{
+  "processType" : "S",
+  "testType" : "M",
+  "fileType" : "N",
+  "createBlank" : false,
+  "pageDivision" : false,
+  "pageDivision_FirstDifferent" : false,
+  "numberOfWord" : 10,
+  "blankRow" : 0,
+  "blankColumn" : 0,
+  "pageDivisionSize" : 0,
+  "pageDivisionFirstSize" : 0,
+  "pageBlankSize" : 0,
+  "numberOfColumn" : 1
+}
