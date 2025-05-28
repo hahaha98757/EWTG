@@ -1,7 +1,7 @@
 package kr.hahaha98757.ewtg.panels;
 
 import kr.hahaha98757.ewtg.MainFrame;
-import kr.hahaha98757.ewtg.Setting;
+import kr.hahaha98757.ewtg.data.Setting;
 import kr.hahaha98757.ewtg.data.CustomJCheckBox;
 import kr.hahaha98757.ewtg.utils.Tools;
 import kr.hahaha98757.ewtg.utils.AbstractJPanel;

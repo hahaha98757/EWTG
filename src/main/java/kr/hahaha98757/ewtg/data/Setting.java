@@ -1,4 +1,4 @@
-package kr.hahaha98757.ewtg;
+package kr.hahaha98757.ewtg.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

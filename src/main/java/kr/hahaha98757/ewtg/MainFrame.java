@@ -6,7 +6,6 @@ import kr.hahaha98757.ewtg.panels.MainPanel;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class MainFrame extends JFrame {
     public final JPanel mainPanel = new MainPanel();
@@ -14,11 +13,6 @@ public class MainFrame extends JFrame {
     public final JPanel excelFileSettingPanel = new ExcelFileSettingPanel();
 
     private static MainFrame instance;
-
-    public static void main(String[] args) {
-        Setting.loadSetting();
-        EventQueue.invokeLater(MainFrame::new);
-    }
 
     @NotNull
     public static MainFrame getInstance() {

@@ -1,5 +1,6 @@
 package kr.hahaha98757.ewtg;
 
+import kr.hahaha98757.ewtg.data.Setting;
 import kr.hahaha98757.ewtg.utils.Tools;
 import kr.hahaha98757.ewtg.data.Word;
 import org.apache.poi.ss.usermodel.Cell;
